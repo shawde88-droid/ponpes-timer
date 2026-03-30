@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponpes Baitussalam - Persiapan Kembali ke Pesantren</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a3c34 0%, #2d5a4a 50%, #1a3c34 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,215,0,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(144,238,144,0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            color: #f4d03f;
+            text-shadow: 0 0 30px rgba(244, 208, 63, 0.5);
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: #ffffff;
+            opacity: 0.9;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .timer-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 30px;
+            margin: 0 auto 60px;
+            max-width: 800px;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.3),
+                0 0 50px rgba(244, 208, 63, 0.2);
+            border: 1px solid rgba(244, 208, 63, 0.3);
+            position: relative;
+            animation: fadeInUp 1.5s ease-out 0.3s both;
+        }
+
+        .timer-label {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: #f4d03f;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            border: 1px solid rgba(244, 208, 63, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .time-unit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .time-unit:hover::before {
+            left: 100%;
+        }
+
+        .time-number {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 
+                0 0 20px rgba(244, 208, 63, 0.8),
+                0 0 40px rgba(244, 208, 63, 0.4);
+            display: block;
+            margin-bottom: 8px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: #f4d03f;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .expired {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .expired.show {
+            display: block;
+        }
+
+        .expired-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #f4d03f;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(244, 208, 63, 0.7);
+        }
+
+        .expired-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .quotes-section {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            text-align: center;
+            animation: fadeInUp 1.8s ease-out 0.6s both;
+        }
+
+        .quote-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            border: 1px solid rgba(244, 208, 63, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-container::before {
+            content: '❝';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 4rem;
+            color: rgba(244, 208, 63, 0.3);
+            font-family: 'Cinzel', serif;
+            z-index: 1;
+        }
+
+        .quote-container::after {
+            content: '❞';
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 4rem;
+            color: rgba(244, 208, 63, 0.3);
+            font-family: 'Cinzel', serif;
+            z-index: 1;
+        }
+
+        .quote-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+            color: #ffffff;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .quote-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            color: #f4d03f;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.2s;
+        }
+
+        .quote-author.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ornament {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(244, 208, 63, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .ornament:nth-child(1) { top: 10%; left: 10%; animation: float 6s ease-in-out infinite; }
+        .ornament:nth-child(2) { top: 70%; right: 10%; animation: float 8s ease-in-out infinite 2s; }
+        .ornament:nth-child(3) { bottom: 20%; left: 20%; animation: float 7s ease-in-out infinite 4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(244, 208, 63, 0.8)); }
+            to { filter: drop-shadow(0 0 30px rgba(244, 208, 63, 1)); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .countdown {
+                gap: 15px;
+            }
+            
+            .time-unit {
+                min-width: 90px;
+                padding: 20px 15px;
+            }
+            
+            .timer-container {
+                padding: 40px 20px;
+                margin-bottom: 40px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .time-unit {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ornament"></div>
+    <div class="ornament"></div>
+    <div class="ornament"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">Ponpes Baitussalam</h1>
+            <p class="subtitle">Persiapan Kembali ke Pesantren</p>
+        </header>
+
+        <div class="timer-container">
+            <div class="timer-label">Waktu Tersisa</div>
+            <div class="countdown" id="countdown">
+                <div class="time-unit">
+                    <span class="time-number" id="days">00</span>
+                    <span class="time-label">Hari</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="hours">00</span>
+                    <span class="time-label">Jam</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="minutes">00</span>
+                    <span class="time-label">Menit</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="seconds">00</span>
+                    <span class="time-label">Detik</span>
+                </div>
+            </div>
+            <div class="expired" id="expired">
+                <div class="expired-title">Waktu Telah Habis</div>
+                <div class="expired-subtitle">Saatnya Kembali ke Pesantren</div>
+            </div>
+        </div>
+
+        <section class="quotes-section">
+            <div class="quote-container">
+                <div class="quote-text" id="quoteText"></div>
+                <div class="quote-author" id="quoteAuthor"></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Target date: Rabu, 1 April 2026 pukul 17:00 waktu lokal
+        const targetDate = new Date('2026-04-01T17:00:00').getTime();
+        let countdownActive = true;
+        let currentQuoteIndex = 0;
+
+        const quotes = [
+            { text: "Disiplin adalah jembatan antara tujuan dan pencapaian.", author: "Jim Rohn" },
+            { text: "Kebiasaan kecil yang dilakukan setiap hari membawa perubahan besar.", author: "Imam Al-Ghazali" },
+            { text: "Orang yang sukses adalah yang bangun pagi dan tidur malam dengan tekad.", author: "Ibnu Sina" },
+            { text: "Perubahan dimulai dari komitmen pada rutinitas harian.", author: "James Clear" },
+            { text: "Ilmu tanpa amal bagaikan pohon tanpa buah.", author: "Imam Syafi'i" },
+            { text: "Kedisiplinan adalah kunci menaklukkan diri sendiri.", author: "Aristoteles" }
+        ];
+
+        function updateTimer() {
+            if (!countdownActive) return;
+
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('expired').classList.add('show');
+                countdownActive = false;
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        function showNextQuote() {
+            const quoteText = document.getElementById('quoteText');
+            const quoteAuthor = document.getElementById('quoteAuthor');
+
+            // Hide current quote
+            quoteText.classList.remove('active');
+            quoteAuthor.classList.remove('active');
+
+            // Move to next quote
+            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+
+            // Show new quote after transition
+            setTimeout(() => {
+                quoteText.textContent = quotes[currentQuoteIndex].text;
+                quoteAuthor.textContent = `— ${quotes[currentQuoteIndex].author}`;
+                quoteText.classList.add('active');
+                quoteAuthor.classList.add('active');
+            }, 400);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show first quote
+            document.getElementById('quoteText').textContent = quotes[0].text;
+            document.getElementById('quoteAuthor').textContent = `— ${quotes[0].author}`;
+            document.getElementById('quoteText').classList.add('active');
+            document.getElementById('quoteAuthor').classList.add('active');
+
+            // Update timer every second
+            setInterval(updateTimer, 1000);
+            updateTimer(); // Initial call
+
+            // Rotate quotes every 6 seconds (random between 5-8)
+            setInterval(() => {
+                const randomDelay = 5000 + Math.random() * 3000;
+                setTimeout(showNextQuote, randomDelay);
+            }, 6000);
+        });
+    </script>
+</body>
+</html>
